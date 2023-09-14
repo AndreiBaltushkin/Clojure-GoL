@@ -56,43 +56,33 @@
 
 ;; gui
 
-(def min-r 10)
-
 (defn setup []
   ; initial state
   (q/frame-rate 100)
-  {:living (filter identity
-                   (for [x (range 1 21)
-                         y (range 1 21)]
-                     (if (= 0 (rand-int 10)) [x y] nil)))})
+  (into #{} (filter identity
+                    (for [x (range 1 21)
+                          y (range 1 21)]
+                      (if (= 0 (rand-int 10)) [x y] nil)))))
 
-(defn update [state]
-  (update-in state [:living] (next-generation (into #{} (:living state)))))
+;; (defn update [state]
+;;   (update-in state (next-generation state)))
   
 
 (defn draw [state]
-  ;; (q/background 255)
-  (q/fill 34 95 215)
+  (q/background 255)
 
-  (doseq [cell (range (count (:living state)))]
-    (let [x (nth (nth (:living state) cell) 0)
-          y (nth (nth (:living state) cell) 1)
+  (doseq [cell (range (count state))]
+    (let [x (nth (nth state cell) 0)
+          y (nth (nth state cell) 1)
           length 20]
+      (q/fill 34 95 215)
       (q/rect (* x length) (* y length) length length))))
 
 (defn run2 [opts]
-  (q/defsketch example
+  (q/defsketch life
     :title "Conway's Game Of Life"
     :size [900 900]
     :setup setup
     :draw draw
-    :update update
+    :update next-generation
     :middleware [m/fun-mode]))
-
-(comment 
-  
-  (def living (filter identity
-                      (for [x (range 1 21)
-                            y (range 1 21)]
-                        (if (= 0 (rand-int 10)) [x y] nil)))) 
-  )

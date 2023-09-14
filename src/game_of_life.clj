@@ -58,11 +58,12 @@
 
 (defn setup []
   ; initial state
-  (q/frame-rate 100)
-  (into #{} (filter identity
-                    (for [x (range 1 21)
-                          y (range 1 21)]
-                      (if (= 0 (rand-int 10)) [x y] nil)))))
+  (q/frame-rate 30)
+  (into #{}
+        (filter identity
+                (for [x (range 1 21)
+                      y (range 1 21)]
+                  (if (= 0 (rand-int 5)) [x y] nil)))))
 
 ;; (defn update [state]
 ;;   (update-in state (next-generation state)))
@@ -70,16 +71,14 @@
 
 (defn draw [state]
   (q/background 255)
+  (q/fill 34 95 215)
 
-  (doseq [cell (range (count state))]
-    (let [x (nth (nth state cell) 0)
-          y (nth (nth state cell) 1)
-          length 20]
-      (q/fill 34 95 215)
+  (doseq [[x y] state]
+    (let [length 20]
       (q/rect (* x length) (* y length) length length))))
 
 (defn run2 [opts]
-  (q/defsketch life
+  (q/defsketch GameOfLife
     :title "Conway's Game Of Life"
     :size [900 900]
     :setup setup

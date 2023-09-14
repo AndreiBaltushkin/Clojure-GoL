@@ -56,24 +56,43 @@
 
 ;; gui
 
+(def min-r 10)
+
 (defn setup []
+  ; initial state
   (q/frame-rate 100)
-  (q/background 200))
+  {:living (filter identity
+                   (for [x (range 1 21)
+                         y (range 1 21)]
+                     (if (= 0 (rand-int 10)) [x y] nil)))})
 
-(defn draw []
-  (q/stroke (q/random 255))             ;; Set the stroke colour to a random grey
-  (q/stroke-weight (q/random 10))       ;; Set the stroke thickness randomly
-  (q/fill (q/random 255))               ;; Set the fill colour to a random grey
+(defn update [state]
+  (update-in state [:living] (next-generation (into #{} (:living state)))))
+  
 
-  (let [diam (q/random 100)             ;; Set the diameter to a value between 0 and 100
-        x    (q/random (q/width))       ;; Set the x coord randomly within the sketch
-        y    (q/random (q/height))]     ;; Set the y coord randomly within the sketch
-    (q/ellipse x y diam diam)))         ;; Draw a circle at x y with the correct diameter
+(defn draw [state]
+  ;; (q/background 255)
+  (q/fill 34 95 215)
 
-(defn run [opts]
-  (q/defsketch example                  ;; Define a new sketch named example
-    :title "Oh so many grey circles"    ;; Set the title of the sketch
-    :settings #(q/smooth 2)             ;; Turn on anti-aliasing
-    :setup setup                        ;; Specify the setup fn
-    :draw draw                          ;; Specify the draw fn
-    :size [900 900]))  
+  (doseq [cell (range (count (:living state)))]
+    (let [x (nth (nth (:living state) cell) 0)
+          y (nth (nth (:living state) cell) 1)
+          length 20]
+      (q/rect (* x length) (* y length) length length))))
+
+(defn run2 [opts]
+  (q/defsketch example
+    :title "Conway's Game Of Life"
+    :size [900 900]
+    :setup setup
+    :draw draw
+    :update update
+    :middleware [m/fun-mode]))
+
+(comment 
+  
+  (def living (filter identity
+                      (for [x (range 1 21)
+                            y (range 1 21)]
+                        (if (= 0 (rand-int 10)) [x y] nil)))) 
+  )

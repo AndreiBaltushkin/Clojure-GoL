@@ -35,8 +35,8 @@
 (deftest string-to-board-test
   (is (= #{[1 1] [1 2] [3 1] [3 2] [4 2]} (string-to-board (board-to-string #{[1 1] [1 2] [3 1] [3 2] [4 2]})))))
 
-
-
+;; (defn tests [opts]
+;;   (run-all-tests #"game-of-life-test"))
 
 ;; to run:
 ;; clj -X <file>/<function>

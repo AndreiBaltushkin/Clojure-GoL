@@ -64,11 +64,7 @@
                 (for [x (range 1 21)
                       y (range 1 21)]
                   (if (= 0 (rand-int 5)) [x y] nil)))))
-
-;; (defn update [state]
-;;   (update-in state (next-generation state)))
   
-
 (defn draw [state]
   (q/background 255)
   (q/fill 34 95 215)
